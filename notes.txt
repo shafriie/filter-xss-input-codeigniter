@@ -1,0 +1,16 @@
+set application/config/config.php 
+$config['global_xss_filtering'] = TRUE; 
+
+We can modify post function from system/core/Input.php
+
+public function post($index = NULL, $xss_clean = NULL)
+	{
+	    $temp = $_POST;
+	    
+	    array_walk_recursive($temp, function(&$leaf){
+	        if(is_string($leaf))
+	        $leaf = htmlentities($leaf);
+	    });
+	    
+		return $this->_fetch_from_array($temp, $index, $xss_clean);
+	}
